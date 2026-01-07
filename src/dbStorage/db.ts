@@ -1,6 +1,7 @@
 import { Pool } from "pg";
 export const pool = new Pool({
-  connectionString: "postgresql://neondb_owner:npg_km2igf3rzjAv@ep-flat-surf-a8n5jany-pooler.eastus2.azure.neon.tech/neondb?sslmode=require&channel_binding=require"
+  connectionString:
+    "postgresql://neondb_owner:npg_km2igf3rzjAv@ep-flat-surf-a8n5jany-pooler.eastus2.azure.neon.tech/neondb?sslmode=require&channel_binding=require",
 });
 // export const pool = new Pool({
 //   connectionString: process.env.DATABASE_URL,
@@ -30,19 +31,19 @@ const initDB = async () => {
         `);
 
   await pool.query(`
-             CREATE TABLE IF NOT EXISTS bookings (
+     CREATE TABLE IF NOT EXISTS bookings (
      id SERIAL PRIMARY KEY,
      customer_id INTEGER NOT NULL REFERENCES users(id),
      vehicle_id INTEGER NOT NULL REFERENCES vehicles(id),
      rent_start_date DATE NOT NULL,
      rent_end_date DATE NOT NULL,
      total_price NUMERIC(10,2) NOT NULL CHECK (total_price > 0),
-     status VARCHAR(20) NOT NULL DEFAULT 'booked'
+     status VARCHAR(20) NOT NULL DEFAULT 'active'
    )
         `);
 
+        
   console.log("Database Initialized");
 };
-
 
 export default initDB;
