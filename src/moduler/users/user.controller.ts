@@ -53,7 +53,7 @@ const getUsers : RequestHandler = async (req, res) => {
     });
   } catch (error: any) {
     res.status(400).json({
-      message: "Loading Vehicle failed from Get",
+      message: "Loading Users failed from Get",
       status: false,
       data: error.message,
     });
@@ -105,10 +105,29 @@ const updateUsers : RequestHandler = async (req, res) => {
   }
 }
 
+const loginUser : RequestHandler = async (req, res) => {
+  try {
+    const {email , password} = req.body;
+    const result = await userService.loginUser(email , password);
+
+    res.status(200).json({
+      message: "Users login successful",
+      status: true,
+      data: result
+    });
+  } catch (error: any) {
+    res.status(400).json({
+      message: "Login failed",
+      status: false,
+      data: error.message,
+    });
+  }
+}
 
 export const userController = {
   createUser,
   getUsers,
   deleteUsers,
-  updateUsers
+  updateUsers,
+  loginUser
 };

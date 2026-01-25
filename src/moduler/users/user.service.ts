@@ -1,12 +1,14 @@
+import bcrypt from "bcryptjs";
 import { pool } from "../../dbStorage/db";
 import { ROLE } from "./user.controller";
+import  Jwt  from "jsonwebtoken";
 
 const createUser = async (
   name: string,
   email: string,
   hashedPassword: string,
   phone: string,
-  role: ROLE
+  role: ROLE,
 ) => {
   const result = await pool.query(
     `INSERT INTO users 
@@ -14,10 +16,29 @@ const createUser = async (
        VALUES ($1, $2, $3, $4, $5)` +
       `
        RETURNING id, name, email, phone, role`,
-    [name, email, hashedPassword, phone, role || ROLE.CUSTOMER]
+    [name, email, hashedPassword, phone, role || ROLE.CUSTOMER],
   );
 
   return result;
+};
+
+const loginUser = async (email: string, password: string) => {
+  const result = await pool.query(` SELECT * FROM users WHERE email = $1`, [
+    email,
+  ]);
+  if (result.rows.length === 0) return null;
+  const user = result.rows[0];
+  const matchPass = await bcrypt.compare(password, user.password);
+
+  if (!matchPass) {
+    return false;
+  }
+
+  const secret = process.env.JWT_SECRET;
+   const token = Jwt.sign({name: user.name , email : user.email},secret as string, {
+    expiresIn : '3d'
+   })
+  return {token , user};
 };
 
 const getUsers = async () => {
@@ -37,7 +58,7 @@ const updateUsers = async (
   password: string,
   phone: string,
   role: ROLE,
-  userId: string
+  userId: string,
 ) => {
   const result = await pool.query(
     `
@@ -50,7 +71,7 @@ const updateUsers = async (
         WHERE id = $6
         RETURNING id, name, email, phone, role
       `,
-    [name, email, password, phone, role, userId]
+    [name, email, password, phone, role, userId],
   );
 
   return result;
@@ -61,4 +82,5 @@ export const userService = {
   getUsers,
   deleteUsers,
   updateUsers,
+  loginUser,
 };

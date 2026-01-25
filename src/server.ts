@@ -18,7 +18,8 @@ initDB();
 app.use("/api/v1/vehicles", vehicleRouter);
 
 // User route for sign up
-app.use("/api/v1/auth/users", userRouter);
+app.use("/api/v1", userRouter);
+
 app.use("/api/v1/bookings", bookingRouter);
 
 
