@@ -110,9 +110,35 @@ const updateBooking : RequestHandler = async (req, res) => {
 }
 }
 
+const singleBooking : RequestHandler = async (req, res) => {
+  try {
+    const { bookingId } = req.params;
+    const result = await bookingService.singleBooking(bookingId!)
+    if (!result.rowCount) {
+      return res.status(404).json({
+        status: false,
+        message: "Vehicle not found",
+      });
+    }
+    console.log(bookingId);
+    res.status(200).json({
+      status: true,
+      message: "Booking Found successfully",
+      data: result.rows,
+    });
+  } catch (error: any) {
+    console.error(error);
+    res.status(500).json({
+      status: false,
+      message: "Something went wrong",
+    });
+}
+}
+
 export const bookingController = {
   createBooking,
   getBooking,
   deleteBooking,
-  updateBooking
+  updateBooking,
+  singleBooking
 };

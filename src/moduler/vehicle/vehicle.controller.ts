@@ -94,7 +94,7 @@ const deleteVehicleById: RequestHandler = async (req, res) => {
 
 const updateVehicle: RequestHandler = async (req, res) => {
   try {
-    const { vehicleId } = req.params;
+    const vehicleId = req.params.id ;
     const {
       vehicle_name,
       type,
@@ -108,7 +108,7 @@ const updateVehicle: RequestHandler = async (req, res) => {
       registration_number,
       daily_rent_price,
       availability_status,
-      vehicleId!
+      vehicleId as string
     );
     if (result.rowCount) {
       res.status(200).json({

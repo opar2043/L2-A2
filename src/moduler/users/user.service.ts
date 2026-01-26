@@ -35,7 +35,7 @@ const loginUser = async (email: string, password: string) => {
   }
 
   const secret = process.env.JWT_SECRET;
-   const token = Jwt.sign({name: user.name , email : user.email},secret as string, {
+   const token = Jwt.sign({name: user.name , email : user.email , role: user.role},secret as string, {
     expiresIn : '3d'
    })
   return {token , user};

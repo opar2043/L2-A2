@@ -1,13 +1,9 @@
 import dotenv from "dotenv";
 dotenv.config(); // ✅ MUST be first
-
 import app from "./app";
 import initDB, { pool } from "./dbStorage/db";
-import { vehicleController } from "./moduler/vehicle/vehicle.controller";
 import { vehicleRouter } from "./moduler/vehicle/vehicle.route";
 import { userRouter } from "./moduler/users/user.route";
-import bcrypt from "bcryptjs";
-import verify from "./middleware/verify";
 import { bookingRouter } from "./moduler/bookings/booking.route";
 
 const PORT = process.env.port || 5000;
@@ -20,13 +16,10 @@ app.use("/api/v1/vehicles", vehicleRouter);
 // User route for sign up
 app.use("/api/v1", userRouter);
 
+// bookings route 
 app.use("/api/v1/bookings", bookingRouter);
 
-
 // ? user rourtes  http://localhost:5000/api/v1/auth/signup
-
-
-
 
 // ? bookings rourtes  http://localhost:5000/api/v1/bookings
 
@@ -112,7 +105,7 @@ app.use("/api/v1/bookings", bookingRouter);
 // app.put("/api/v1/bookings/:bookingId",  async (req, res) => {
 //   try {
 //     const { bookingId } = req.params;
-//     const result = await pool.query(`UPDATE bookings SET status= 'cancelled' 
+//     const result = await pool.query(`UPDATE bookings SET status= 'cancelled'
 //       WHERE id = $1 RETURNING *`, [bookingId]);
 
 //     if (!result.rowCount) {
@@ -139,7 +132,7 @@ app.use("/api/v1/bookings", bookingRouter);
 // app.delete("/api/v1/bookings/:bookingId", async (req, res) => {
 //   try {
 //     const { bookingId } = req.params;
-//     const result = await pool.query(`DELETE FROM bookings 
+//     const result = await pool.query(`DELETE FROM bookings
 //       WHERE id = $1 RETURNING *`, [bookingId]);
 
 //     if (!result.rowCount) {

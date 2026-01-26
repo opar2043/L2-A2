@@ -46,11 +46,19 @@ const updateBooking = async (bookingId: string) => {
   );
   return result;
 };
+const singleBooking = async (bookingId: string) => {
+  const result = await pool.query(
+    `UPDATE bookings SET status= 'cancelled' 
+      WHERE id = $1 RETURNING *`,
+    [bookingId]
+  );
+  return result;
+};
 
 
 const deleteBooking = async (bookingId: string) => {
   const result = await pool.query(
-    `DELETE FROM bookings 
+    `SELECT *  FROM bookings 
       WHERE id = $1 RETURNING *`,
     [bookingId]
   );
@@ -62,4 +70,5 @@ export const bookingService = {
   getBooking,
   updateBooking,
   deleteBooking,
+  singleBooking
 };
