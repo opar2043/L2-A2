@@ -3,14 +3,14 @@ import { bookingService } from "./booking.service";
 
 const createBooking: RequestHandler = async (req, res) => {
   try {
-    const { customer_id, vehicle_id, rent_start_date, rent_end_date } =
-      req.body;
+    const { customer_id } = req.body;
+    const { vehicle_id, rent_start_date, rent_end_date } = req.body;
 
     const result = await bookingService.createBooking(
       customer_id!,
       rent_start_date as string,
       rent_end_date as string,
-      vehicle_id!
+      vehicle_id!,
     );
 
     if (!result.rowCount) {
@@ -62,6 +62,7 @@ const getBooking: RequestHandler = async (req, res) => {
 const deleteBooking: RequestHandler = async (req, res) => {
   try {
     const { bookingId } = req.params;
+    console.log(bookingId);
     const result = await bookingService.deleteBooking(bookingId!);
 
     if (!result.rowCount) {
@@ -85,10 +86,10 @@ const deleteBooking: RequestHandler = async (req, res) => {
   }
 };
 
-const updateBooking : RequestHandler = async (req, res) => {
+const updateBooking: RequestHandler = async (req, res) => {
   try {
     const { bookingId } = req.params;
-    const result = await bookingService.updateBooking(bookingId!)
+    const result = await bookingService.updateBooking(bookingId!);
     if (!result.rowCount) {
       return res.status(404).json({
         status: false,
@@ -107,13 +108,13 @@ const updateBooking : RequestHandler = async (req, res) => {
       status: false,
       message: "Something went wrong",
     });
-}
-}
+  }
+};
 
-const singleBooking : RequestHandler = async (req, res) => {
+const singleBooking: RequestHandler = async (req, res) => {
   try {
     const { bookingId } = req.params;
-    const result = await bookingService.singleBooking(bookingId!)
+    const result = await bookingService.singleBooking(bookingId!);
     if (!result.rowCount) {
       return res.status(404).json({
         status: false,
@@ -132,13 +133,13 @@ const singleBooking : RequestHandler = async (req, res) => {
       status: false,
       message: "Something went wrong",
     });
-}
-}
+  }
+};
 
 export const bookingController = {
   createBooking,
   getBooking,
   deleteBooking,
   updateBooking,
-  singleBooking
+  singleBooking,
 };

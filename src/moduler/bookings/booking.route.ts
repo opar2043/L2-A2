@@ -6,10 +6,10 @@ import { ROLE } from "../users/user.controller";
 
 const router = Router();
 
-router.post('/' , bookingController.createBooking)
+router.post('/' ,auth(ROLE.ADMIN) ,bookingController.createBooking);
 router.get('/' ,auth(ROLE.ADMIN), bookingController.getBooking);
 router.get('/:bookingId' ,auth(ROLE.CUSTOMER , ROLE.ADMIN), bookingController.singleBooking)
 router.put('/:bookingId' ,auth(ROLE.CUSTOMER), bookingController.updateBooking)
-router.delete('/:bookingId' , auth(ROLE.ADMIN), bookingController.deleteBooking)
+router.delete('/:bookingId' ,  bookingController.deleteBooking);
 
 export const bookingRouter = router

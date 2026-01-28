@@ -58,13 +58,15 @@ const singleBooking = async (bookingId: string) => {
 
 const deleteBooking = async (bookingId: string) => {
   const result = await pool.query(
-    `SELECT *  FROM bookings 
-      WHERE id = $1 RETURNING *`,
+    `DELETE FROM bookings
+     WHERE id = $1
+     RETURNING *`,
     [bookingId]
   );
 
   return result;
 };
+
 export const bookingService = {
   createBooking,
   getBooking,

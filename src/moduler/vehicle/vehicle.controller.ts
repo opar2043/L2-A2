@@ -94,7 +94,8 @@ const deleteVehicleById: RequestHandler = async (req, res) => {
 
 const updateVehicle: RequestHandler = async (req, res) => {
   try {
-    const vehicleId = req.params.id ;
+    const vehicleId = req.params.vehicleId;
+    console.log(vehicleId);
     const {
       vehicle_name,
       type,
@@ -102,6 +103,7 @@ const updateVehicle: RequestHandler = async (req, res) => {
       daily_rent_price,
       availability_status,
     } = req.body;
+
     const result = await vehicleService.updateVehicle(
       vehicle_name,
       type,
@@ -110,23 +112,29 @@ const updateVehicle: RequestHandler = async (req, res) => {
       availability_status,
       vehicleId as string
     );
-    if (result.rowCount) {
+
+    if (result.rowCount && result.rowCount > 0) {
       res.status(200).json({
-        message: "Vehicle Updated successful",
+        message: "Vehicle Updated successfully",
         status: true,
         data: result.rows[0],
       });
     } else {
-      res
-        .status(404)
-        .json({ message: "Vehicle not found", status: false, data: [] });
+      res.status(404).json({
+        message: "Vehicle not found",
+        status: false,
+        data: [],
+      });
     }
-  } catch (error: any) {
-    res
-      .status(400)
-      .json({ message: "Something happen wrong", status: false, data: [] });
+  } catch (error) {
+    res.status(400).json({
+      message: "Something went wrong",
+      status: false,
+      data: [],
+    });
   }
 };
+
 
 export const vehicleController = {
   createVehicle,
